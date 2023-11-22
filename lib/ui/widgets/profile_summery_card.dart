@@ -22,18 +22,18 @@ class ProfileSummeryCard extends StatelessWidget {
           );
         }
       },
-      leading: CircleAvatar(
+      leading: const CircleAvatar(
         child: Icon(Icons.person),
       ),
-      title: Text(
+      title: const Text(
         'Rabbil Hasan',
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
       ),
-      subtitle: Text(
+      subtitle: const Text(
         'rabbil@gmail.com',
         style: TextStyle(color: Colors.white),
       ),
-      trailing: enableOnTap?Icon(Icons.arrow_forward):null,
+      trailing: enableOnTap?const Icon(Icons.arrow_forward):null,
       tileColor: Colors.green,
     );
   }

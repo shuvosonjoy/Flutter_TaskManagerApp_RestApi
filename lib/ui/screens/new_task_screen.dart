@@ -24,16 +24,16 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            ProfileSummeryCard(),
-            SingleChildScrollView(
+            const ProfileSummeryCard(),
+            const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
+                padding: EdgeInsets.only(left: 16, right: 16),
                 child: Row(
                   children: [
                     SummeryCard(

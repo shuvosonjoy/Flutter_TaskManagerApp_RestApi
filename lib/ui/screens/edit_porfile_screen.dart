@@ -17,7 +17,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            ProfileSummeryCard(
+            const ProfileSummeryCard(
               enableOnTap: false,
             ),
             Expanded(
@@ -38,7 +38,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        PhotoPickerField(),
+                        const PhotoPickerField(),
                         const SizedBox(
                           height: 8,
                         ),
@@ -78,7 +78,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {},
-                            child: Icon(Icons.arrow_circle_right_outlined),
+                            child: const Icon(Icons.arrow_circle_right_outlined),
                           ),
                         ),
                       ],

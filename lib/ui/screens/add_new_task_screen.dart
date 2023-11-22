@@ -17,7 +17,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            ProfileSummeryCard(),
+            const ProfileSummeryCard(),
             Expanded(
               child: BodyBackground(
                 child: SingleChildScrollView(
@@ -57,7 +57,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {},
-                              child: Icon(Icons.arrow_circle_right_outlined),
+                              child: const Icon(Icons.arrow_circle_right_outlined),
                             ),),
                       ],
                     ),

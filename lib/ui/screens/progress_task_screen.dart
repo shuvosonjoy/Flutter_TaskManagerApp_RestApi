@@ -15,7 +15,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              ProfileSummeryCard(),
+              const ProfileSummeryCard(),
 
               Expanded(
                 child: ListView.builder(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ostad_task_manager/ui/screens/login_screen.dart';
 import 'package:ostad_task_manager/ui/screens/reset_password_screen.dart';
-import 'package:ostad_task_manager/ui/screens/signup_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -25,7 +24,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 99,
                 ),
                 Text(
@@ -60,7 +59,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     inactiveColor: Colors.lightGreen,
                     inactiveFillColor: Colors.white,
                   ),
-                  animationDuration: Duration(milliseconds: 300),
+                  animationDuration: const Duration(milliseconds: 300),
                   enableActiveFill: true,
                   onCompleted: (v) {
                     print("Completed");

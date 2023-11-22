@@ -18,13 +18,13 @@ class PhotoPickerField extends StatelessWidget {
             flex: 1,
             child: Container(
               height: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.grey,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     bottomLeft: Radius.circular(8),
                   )),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Photos',
                   style: TextStyle(
@@ -37,8 +37,8 @@ class PhotoPickerField extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
+              child: const Padding(
+                padding: EdgeInsets.only(left: 16.0),
                 child: Text('Empty'),
               ),
             ),),

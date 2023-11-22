@@ -14,7 +14,7 @@ class _TaskManagerAppState extends State<TaskManagerApp> {
     return MaterialApp(
       home: const SplashScreen(),
       theme: ThemeData(
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
@@ -24,7 +24,7 @@ class _TaskManagerAppState extends State<TaskManagerApp> {
             borderSide: BorderSide.none,
           ),
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           titleLarge: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.w600,

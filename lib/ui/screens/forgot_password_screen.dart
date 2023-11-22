@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ostad_task_manager/ui/screens/pin_verification_screen.dart';
-import 'package:ostad_task_manager/ui/screens/signup_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 99,
                 ),
                 Text(

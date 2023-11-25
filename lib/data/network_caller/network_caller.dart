@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart';
+import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 
 
 import 'network_response.dart';
@@ -15,6 +16,7 @@ class NetWorkCaller {
       final Response response =
       await post(Uri.parse(url), body: jsonEncode(body), headers: {
         'Content-type': 'Application/json',
+        'token':AuthController.token.toString(),
 
       });
       log(response.headers.toString());

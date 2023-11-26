@@ -105,6 +105,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   }
 
   Future<void> createTask() async{
+
         if(_formkey.currentState!.validate()){
           _createTaskInprogress =true;
           if(mounted){

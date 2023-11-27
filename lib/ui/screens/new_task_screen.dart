@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ostad_task_manager/data/model/task_count.dart';
+import 'package:ostad_task_manager/data/model/task_count_summery_list_model.dart';
 import 'package:ostad_task_manager/data/model/task_list_model.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/network_caller/network_response.dart';
@@ -17,7 +19,27 @@ class NewTaskScreen extends StatefulWidget {
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
   bool getNewTaskInProgress = false;
+  bool getTaskCountSummeryInProgress = false;
   TaskListModel taskListModel = TaskListModel();
+  TaskCountSummeryListModel taskCountSummeryListModel =
+      TaskCountSummeryListModel();
+
+  Future<void> getTaskCountSummeryList() async {
+    getTaskCountSummeryInProgress = true;
+    if (mounted) {
+      setState(() {});
+      final NetworkResponse response =
+          await NetWorkCaller().getRequest(Urls.getTaskStatusCount);
+      if (response.isSuccess) {
+        taskCountSummeryListModel =
+            TaskCountSummeryListModel.fromJson(response.jsonResponse);
+      }
+      getTaskCountSummeryInProgress = false;
+      if (mounted) {
+        setState(() {});
+      }
+    }
+  }
 
   Future<void> getNewTask() async {
     getNewTaskInProgress = true;
@@ -37,8 +59,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   @override
   void initState() {
-
     super.initState();
+    getTaskCountSummeryList();
     getNewTask();
   }
 
@@ -60,42 +82,38 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         child: Column(
           children: [
             const ProfileSummeryCard(),
-            const SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  children: [
-                    SummeryCard(
-                      count: '92',
-                      title: 'New',
-                    ),
-                    SummeryCard(
-                      count: '92',
-                      title: 'In Progress',
-                    ),
-                    SummeryCard(
-                      count: '92',
-                      title: 'Completed',
-                    ),
-                    SummeryCard(
-                      count: '92',
-                      title: 'Cancelled',
-                    ),
-                  ],
-                ),
+            Visibility(
+              visible: getTaskCountSummeryInProgress == false &&
+                  (taskCountSummeryListModel.taskCountList?.isNotEmpty ??
+                      false),
+              replacement: const LinearProgressIndicator(),
+              child: SizedBox(
+                height: 120,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount:
+                        taskCountSummeryListModel.taskCountList?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      TaskCount taskcount =
+                          taskCountSummeryListModel.taskCountList![index];
+                      return FittedBox(
+                        child: SummeryCard(
+                            count: taskcount.sum.toString(),
+                            title: taskcount.sId ?? ''),
+                      );
+                    }),
               ),
             ),
             Expanded(
               child: Visibility(
-                visible: getNewTaskInProgress==false,
+                visible: getNewTaskInProgress == false,
                 replacement: Center(
                   child: const CircularProgressIndicator(),
                 ),
                 child: ListView.builder(
-                    itemCount: taskListModel.taskList?.length??0,
+                    itemCount: taskListModel.taskList?.length ?? 0,
                     itemBuilder: (context, index) {
-                      return  TaskItemCard(
+                      return TaskItemCard(
                         task: taskListModel.taskList![index],
                       );
                     }),

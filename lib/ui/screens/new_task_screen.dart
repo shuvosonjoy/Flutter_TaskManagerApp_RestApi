@@ -41,7 +41,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     }
   }
 
-  Future<void> getNewTask() async {
+  Future<void> getNewTaskList() async {
     getNewTaskInProgress = true;
     if (mounted) {
       setState(() {});
@@ -61,7 +61,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   void initState() {
     super.initState();
     getTaskCountSummeryList();
-    getNewTask();
+    getNewTaskList();
   }
 
   @override
@@ -105,18 +105,32 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               ),
             ),
             Expanded(
-              child: Visibility(
-                visible: getNewTaskInProgress == false,
-                replacement: Center(
-                  child: const CircularProgressIndicator(),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  getNewTaskList();
+                },
+                child: Visibility(
+                  visible: getNewTaskInProgress == false,
+                  replacement: Center(
+                    child: const CircularProgressIndicator(),
+                  ),
+                  child: ListView.builder(
+                      itemCount: taskListModel.taskList?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return TaskItemCard(
+                          task: taskListModel.taskList![index],
+                          onStatusChange: () {
+                            getNewTaskList();
+                          },
+                          showProgress: (inProgress) {
+                            getNewTaskInProgress = inProgress;
+                            if (mounted) {
+                              setState(() {});
+                            }
+                          },
+                        );
+                      }),
                 ),
-                child: ListView.builder(
-                    itemCount: taskListModel.taskList?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return TaskItemCard(
-                        task: taskListModel.taskList![index],
-                      );
-                    }),
               ),
             ),
           ],

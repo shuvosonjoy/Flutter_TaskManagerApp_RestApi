@@ -1,17 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/ui/screens/login_screen.dart';
 import 'package:ostad_task_manager/ui/screens/reset_password_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
+import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../data/network_caller/network_response.dart';
+import '../../data/utility/urls.dart';
+
 class PinVerificationScreen extends StatefulWidget {
-  const PinVerificationScreen({super.key});
+  final String email;
+
+  const PinVerificationScreen({super.key, required this.email});
 
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
+  final TextEditingController _otpTEController = TextEditingController();
+  bool _otpInProgress = false;
+
+  Future<void> verifyOTP() async {
+    _otpInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    final NetworkResponse response = await NetWorkCaller()
+        .getRequest(Urls.verifyOTP(widget.email, _otpTEController.text.trim()));
+
+
+    _otpInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+    if (response.isSuccess && response!=null) {
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResetPasswordScreen(
+              email: widget.email,
+              otp: _otpTEController.text,
+            ),
+          ),
+        );
+      }
+    } else {
+      if (mounted) {
+        print(_otpTEController.text);
+        print(widget.email);
+        showSnackMessage(context, 'Otp verification has been failed!', true);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +89,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                   height: 24,
                 ),
                 PinCodeTextField(
+                  controller: _otpTEController,
                   length: 6,
                   obscureText: false,
                   animationType: AnimationType.fade,
@@ -64,7 +109,10 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                   onCompleted: (v) {
                     print("Completed");
                   },
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    print(value);
+                    setState(() {});
+                  },
                   beforeTextPaste: (text) {
                     return true;
                   },
@@ -78,22 +126,32 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ResetPasswordScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('Verify'),
+                  child: Visibility(
+                    visible: _otpInProgress == false,
+                    replacement: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    child: Visibility(
+                      visible: _otpInProgress==false,
+                      replacement: Center(child: CircularProgressIndicator(),),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          verifyOTP();
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const ResetPasswordScreen(),
+                          //   ),
+                          // );
+                        },
+                        child: const Text('Verify'),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 48,
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

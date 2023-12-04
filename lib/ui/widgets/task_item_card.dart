@@ -75,12 +75,12 @@ class _TaskItemCardState extends State<TaskItemCard> {
                         onPressed: () {
                           showDeleteStatusModal(widget.task?.sId ?? '');
                         },
-                        icon: const Icon(Icons.delete_forever_outlined)),
+                        icon: const Icon(Icons.delete,color: Colors.red,)),
                     IconButton(
                         onPressed: () {
                           showUpdateStatusModal();
                         },
-                        icon: const Icon(Icons.edit)),
+                        icon: const Icon(Icons.edit,color: Colors.green,)),
                   ],
                 )
               ],

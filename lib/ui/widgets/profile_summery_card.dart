@@ -42,6 +42,7 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
             imageBytes,
             fit: BoxFit.cover,
           ),
+          //child:Icon(Icons.abc),
         ),
       ),
       title:  Text(

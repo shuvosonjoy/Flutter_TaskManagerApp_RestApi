@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ostad_task_manager/data/model/user_model.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/utility/urls.dart';
 import '../../data/model/task.dart';
@@ -6,7 +7,11 @@ import '../../data/model/task.dart';
 enum TaskStatus { New, Progress, Completed, Cancelled }
 
 class TaskItemCard extends StatefulWidget {
-  const TaskItemCard({super.key, required this.task,required this.onStatusChange, required this.showProgress});
+  const TaskItemCard(
+      {super.key,
+      required this.task,
+      required this.onStatusChange,
+      required this.showProgress});
 
   final Task task;
   final VoidCallback onStatusChange;
@@ -17,20 +22,24 @@ class TaskItemCard extends StatefulWidget {
 }
 
 class _TaskItemCardState extends State<TaskItemCard> {
-
-
   Future<void> updateTaskStatus(String status) async {
     widget.showProgress(true);
-    final response = await NetWorkCaller().getRequest(Urls.UpdateTaskStatus(widget.task.sId??'', status));
-    if(response.isSuccess){
+    final response = await NetWorkCaller()
+        .getRequest(Urls.UpdateTaskStatus(widget.task.sId ?? '', status));
+    if (response.isSuccess) {
       widget.onStatusChange();
     }
     widget.showProgress(false);
-
-
   }
 
-
+  Future<void> DeleteTask(dynamic id) async {
+    widget.showProgress(true);
+    final response = await NetWorkCaller().getRequest(Urls.deleteTaskUrl(id));
+    if (response.isSuccess) {
+      widget.onStatusChange();
+    }
+    widget.showProgress(false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +71,11 @@ class _TaskItemCardState extends State<TaskItemCard> {
                 ),
                 Wrap(
                   children: [
-                    // IconButton(
-                    //     onPressed: () {},
-                    //     icon: const Icon(Icons.delete_forever_outlined)),
+                    IconButton(
+                        onPressed: () {
+                          showDeleteStatusModal(widget.task?.sId ?? '');
+                        },
+                        icon: const Icon(Icons.delete_forever_outlined)),
                     IconButton(
                         onPressed: () {
                           showUpdateStatusModal();
@@ -115,6 +126,40 @@ class _TaskItemCardState extends State<TaskItemCard> {
                 ],
               )
             ],
+          );
+        });
+  }
+
+  void showDeleteStatusModal(dynamic id) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Delete Task!'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Once Pressing Yes Item will be permanently Deleted!",
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          DeleteTask(id);
+                        },
+                        child: Text("Yes")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("No"))
+                  ],
+                ),
+              ],
+            ),
           );
         });
   }

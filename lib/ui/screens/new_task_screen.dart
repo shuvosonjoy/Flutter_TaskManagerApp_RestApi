@@ -46,7 +46,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     if (mounted) {
       setState(() {});
       final NetworkResponse response =
-      await NetWorkCaller().getRequest(Urls.getNewTask);
+          await NetWorkCaller().getRequest(Urls.getNewTask);
       if (response.isSuccess) {
         taskListModel = TaskListModel.fromJson(response.jsonResponse);
       }
@@ -62,12 +62,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     super.initState();
     getTaskCountSummeryList();
     getNewTaskList();
-   if(mounted){
-     setState(() {
-
-     });
-   }
-
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

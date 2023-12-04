@@ -11,6 +11,10 @@ class Urls {
   static  String getCompletedTask = '$_baseUrl/listTaskByStatus/${TaskStatus.Completed.name}';
   static  String getCancelledTask = '$_baseUrl/listTaskByStatus/${TaskStatus.Cancelled.name}';
 
+
+  static String deleteTaskUrl(String id) =>
+      '$_baseUrl/deleteTask/$id';
+
   static  String UpdateTaskStatus(String taskId, String status) =>
       '$_baseUrl/updateTaskStatus/$taskId/$status';
 

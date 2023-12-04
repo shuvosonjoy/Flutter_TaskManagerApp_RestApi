@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/screens/edit_porfile_screen.dart';
@@ -18,6 +20,8 @@ class ProfileSummeryCard extends StatefulWidget {
 class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
   @override
   Widget build(BuildContext context) {
+   Uint8List imageBytes = const Base64Decoder().convert(AuthController.user?.photo??'');
+  //  Uint8List previewImage = base64.decode(AuthController.user?.photo??'');
     return ListTile(
       onTap: () {
         if (widget.enableOnTap == true) {
@@ -29,8 +33,16 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
           );
         }
       },
-      leading: const CircleAvatar(
-        child: Icon(Icons.person),
+      leading: CircleAvatar(
+        child: AuthController.user?.photo == null
+            ? const Icon(Icons.person)
+            : ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: Image.memory(
+            imageBytes,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
       title:  Text(
        fullName,

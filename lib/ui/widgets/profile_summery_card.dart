@@ -21,7 +21,7 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
   @override
   Widget build(BuildContext context) {
    Uint8List imageBytes = const Base64Decoder().convert(AuthController.user?.photo??'');
-  //  Uint8List previewImage = base64.decode(AuthController.user?.photo??'');
+
     return ListTile(
       onTap: () {
         if (widget.enableOnTap == true) {

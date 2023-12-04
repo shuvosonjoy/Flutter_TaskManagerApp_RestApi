@@ -8,10 +8,9 @@ import 'package:ostad_task_manager/data/network_caller/network_response.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/profile_summery_card.dart';
-import 'package:ostad_task_manager/ui/widgets/photo_picker_field.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
-
 import '../../data/utility/urls.dart';
+import 'main_bottom_navscreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -28,6 +27,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? photoBase64;
+  ProfileSummeryCard profileSummeryCard = ProfileSummeryCard();
 
   bool updateProfileInProgress = false;
 
@@ -41,6 +41,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _firstNameController.text = AuthController.user?.firstName ?? '';
     _lastNameController.text = AuthController.user?.lastName ?? '';
     _mobileController.text = AuthController.user?.mobile ?? '';
+  //  profileSummeryCard;
+  //  updateProfile();
+  //   if(mounted){
+  //     setState(() {
+  //     }
+  //    );
+  //   }
   }
 
   @override
@@ -159,7 +166,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               hintText: 'Password (Optional)',
                             ),
                             validator: (String? value) {
-                              if (value!.length < 6 && value!.length > 0) {
+                              if (value!.length < 6 && value.length > 0) {
                                 return 'Enter Password more than 6 letters';
                               }
                               return null;
@@ -178,6 +185,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
                                     updateProfile();
+
+
+                                    if(mounted){
+                                      setState(() {
+                                      //  profileSummeryCard;
+
+                                      });
+                                    }
                                   }
                                 },
                                 child: const Icon(
@@ -237,10 +252,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ));
       if (mounted) {
         showSnackMessage(context, 'Update Profile success');
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainBottomNavScreen()), (route) => false);
+
       }
     } else {
       if (mounted) {
-        showSnackMessage(context, 'Update Profile failed. try again');
+        showSnackMessage(context, 'Update Profile failed. try again',true);
       }
     }
   }
@@ -251,7 +268,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          color: Colors.white, borderRadius: BorderRadius.circular(8),),
       child: Row(
         children: [
           Expanded(

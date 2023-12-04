@@ -23,6 +23,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   TaskListModel taskListModel = TaskListModel();
   TaskCountSummeryListModel taskCountSummeryListModel =
       TaskCountSummeryListModel();
+  ProfileSummeryCard profileSummeryCard = ProfileSummeryCard();
 
   Future<void> getTaskCountSummeryList() async {
     getTaskCountSummeryInProgress = true;
@@ -49,6 +50,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           await NetWorkCaller().getRequest(Urls.getNewTask);
       if (response.isSuccess) {
         taskListModel = TaskListModel.fromJson(response.jsonResponse);
+        getTaskCountSummeryList();
       }
       getNewTaskInProgress = false;
       if (mounted) {
@@ -62,6 +64,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     super.initState();
     getTaskCountSummeryList();
     getNewTaskList();
+    profileSummeryCard;
+
     if (mounted) {
       setState(() {});
     }
@@ -84,7 +88,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const ProfileSummeryCard(),
+            ProfileSummeryCard(),
             Visibility(
               visible: getTaskCountSummeryInProgress == false &&
                   (taskCountSummeryListModel.taskCountList?.isNotEmpty ??

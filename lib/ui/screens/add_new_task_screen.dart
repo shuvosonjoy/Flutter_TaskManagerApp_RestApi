@@ -6,6 +6,7 @@ import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
 
 import '../widgets/profile_summery_card.dart';
+import 'main_bottom_navscreen.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
@@ -128,6 +129,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
             _subjectTEController.clear();
             _descriptionTEController.clear();
             showSnackMessage(context, 'New Task created');
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainBottomNavScreen()), (route) => false);
 
           }else{
             if(mounted){

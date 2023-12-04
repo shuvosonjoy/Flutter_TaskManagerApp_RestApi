@@ -44,6 +44,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     if (response.isSuccess) {
       if (mounted) {
         showSnackMessage(context, 'Password reset successfull');
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const LoginScreen()), (route) => false);
       }
     } else {
       if (mounted) {

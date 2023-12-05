@@ -137,12 +137,6 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           verifyOTP();
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => const ResetPasswordScreen(),
-                          //   ),
-                          // );
                         },
                         child: const Text('Verify'),
                       ),

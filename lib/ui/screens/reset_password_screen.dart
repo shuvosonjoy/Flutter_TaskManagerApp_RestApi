@@ -18,8 +18,7 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
-  final TextEditingController _confirmPasswordTEController =
-  TextEditingController();
+  final TextEditingController _confirmPasswordTEController = TextEditingController();
   bool _resetPasswordInProgress = false;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -29,10 +28,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       setState(() {});
     }
 
-
-
-    final NetworkResponse response =
-    await NetWorkCaller().postRequest(Urls.resetPassword, body:{
+    final NetworkResponse response = await NetWorkCaller().postRequest(Urls.resetPassword, body:{
       "email": widget.email,
       "OTP": widget.otp,
       "password": _passwordTEController.text

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ostad_task_manager/data/model/user_model.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/utility/urls.dart';
+import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import '../../data/model/task.dart';
 
 enum TaskStatus { New, Progress, Completed, Cancelled }
@@ -27,6 +29,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
     final response = await NetWorkCaller()
         .getRequest(Urls.UpdateTaskStatus(widget.task.sId ?? '', status));
     if (response.isSuccess) {
+      Get.find<TaskCountController>().getTaskCountSummeryList();
       widget.onStatusChange();
     }
     widget.showProgress(false);
@@ -75,12 +78,18 @@ class _TaskItemCardState extends State<TaskItemCard> {
                         onPressed: () {
                           showDeleteStatusModal(widget.task?.sId ?? '');
                         },
-                        icon: const Icon(Icons.delete,color: Colors.red,)),
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        )),
                     IconButton(
                         onPressed: () {
                           showUpdateStatusModal();
                         },
-                        icon: const Icon(Icons.edit,color: Colors.green,)),
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.green,
+                        )),
                   ],
                 )
               ],

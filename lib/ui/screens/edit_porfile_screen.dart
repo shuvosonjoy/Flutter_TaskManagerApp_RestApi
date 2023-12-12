@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ostad_task_manager/data/model/user_model.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/network_caller/network_response.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
+import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/profile_summery_card.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
@@ -30,6 +32,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   ProfileSummeryCard profileSummeryCard = ProfileSummeryCard();
 
   bool updateProfileInProgress = false;
+  AuthController authController =Get.find<AuthController>();
 
   XFile? photo;
 
@@ -37,10 +40,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
 
-    _emailController.text = AuthController.user?.email ?? '';
-    _firstNameController.text = AuthController.user?.firstName ?? '';
-    _lastNameController.text = AuthController.user?.lastName ?? '';
-    _mobileController.text = AuthController.user?.mobile ?? '';
+    _emailController.text = authController.user?.email ?? '';
+    _firstNameController.text = authController.user?.firstName ?? '';
+    _lastNameController.text = authController.user?.lastName ?? '';
+    _mobileController.text = authController.user?.mobile ?? '';
   //  profileSummeryCard;
   //  updateProfile();
   //   if(mounted){
@@ -242,12 +245,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
 
     if (response.isSuccess) {
-      AuthController.updateUserInformation(UserModel(
+      Get.find<NewTaskController>().getNewTaskList();
+      authController.updateUserInformation(UserModel(
         email: _emailController.text.trim(),
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         mobile: _mobileController.text.trim(),
-        photo: photoBase64??AuthController.user?.photo??'',
+        photo: photoBase64??authController.user?.photo??'',
 
       ));
       if (mounted) {

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
+import 'package:ostad_task_manager/ui/controller/login_controller.dart';
+import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
+import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/screens/splash_screen.dart';
 
-class TaskManagerApp extends StatefulWidget {
+class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
   static GlobalKey<NavigatorState>navigationKey=GlobalKey<NavigatorState>();
 
   @override
-  State<TaskManagerApp> createState() => _TaskManagerAppState();
-}
-
-class _TaskManagerAppState extends State<TaskManagerApp> {
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: TaskManagerApp.navigationKey,
+    return GetMaterialApp(
+      initialBinding: ControllerBinder(),
+      navigatorKey: navigationKey,
       home: const SplashScreen(),
       theme: ThemeData(
         inputDecorationTheme: const InputDecorationTheme(
@@ -43,5 +44,17 @@ class _TaskManagerAppState extends State<TaskManagerApp> {
         )
       ),
     );
+  }
+}
+
+
+class ControllerBinder extends Bindings{
+  @override
+  void dependencies() {
+    Get.put(AuthController());
+    Get.put(LoginController());
+    Get.put(NewTaskController());
+    Get.put(TaskCountController());
+
   }
 }

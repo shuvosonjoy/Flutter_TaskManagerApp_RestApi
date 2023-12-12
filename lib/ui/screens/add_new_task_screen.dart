@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/network_caller/network_response.dart';
 import 'package:ostad_task_manager/data/utility/urls.dart';
+import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
+import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
 
@@ -126,6 +129,8 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
             });
           }
           if(response.isSuccess){
+            Get.find<NewTaskController>().getNewTaskList();
+            Get.find<TaskCountController>().getTaskCountSummeryList();
             _subjectTEController.clear();
             _descriptionTEController.clear();
             showSnackMessage(context, 'New Task created');

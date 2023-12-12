@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/screens/login_screen.dart';
 import 'package:ostad_task_manager/ui/screens/main_bottom_navscreen.dart';
@@ -15,7 +14,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  AuthController authController =Get.find<AuthController>();
   @override
   void initState() {
     super.initState();
@@ -23,14 +21,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void goToLogin() async{
- final bool isLoggedIn = await authController.checkAuthState();
+ final bool isLoggedIn = await AuthController.checkAuthState();
 
     Future.delayed(const Duration(seconds: 2)).then((value) {
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => isLoggedIn ?const MainBottomNavScreen(): const LoginScreen()),
-      //     (route) => false);
-      Get.offAll(isLoggedIn ?const MainBottomNavScreen(): const LoginScreen());
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => isLoggedIn ?const MainBottomNavScreen(): const LoginScreen()),
+          (route) => false);
     });
   }
 
@@ -39,9 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
         body:BodyBackground(
           child:  Center(
-            child: Image.asset(
-              'assets/images/logo.png',
-              height: 300,width: 300,
+            child: SvgPicture.asset(
+              'assets/images/logo.svg',
             ),
           ),
         )

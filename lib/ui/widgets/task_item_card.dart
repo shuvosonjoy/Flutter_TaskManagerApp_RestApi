@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ostad_task_manager/data/model/task_count_summery_list_model.dart';
 import 'package:ostad_task_manager/data/model/user_model.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/utility/urls.dart';
+import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import '../../data/model/task.dart';
 
@@ -39,6 +41,8 @@ class _TaskItemCardState extends State<TaskItemCard> {
     widget.showProgress(true);
     final response = await NetWorkCaller().getRequest(Urls.deleteTaskUrl(id));
     if (response.isSuccess) {
+      Get.find<TaskCountController>().getTaskCountSummeryList();
+
       widget.onStatusChange();
     }
     widget.showProgress(false);

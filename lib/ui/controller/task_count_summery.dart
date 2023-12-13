@@ -15,12 +15,14 @@ class TaskCountController extends GetxController {
       _taskCountSummeryListModel;
 
   Future<bool> getTaskCountSummeryList() async {
-    _getTaskCountSummeryInProgress = true;
     bool isSuccess = false;
+    _getTaskCountSummeryInProgress = true;
+
     update();
     final NetworkResponse response =
         await NetWorkCaller().getRequest(Urls.getTaskStatusCount);
     _getTaskCountSummeryInProgress = false;
+    //update();
     if (response.isSuccess) {
       isSuccess = true;
       _taskCountSummeryListModel =

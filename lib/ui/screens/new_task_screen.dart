@@ -27,10 +27,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   @override
   void initState() {
+    super.initState();
     Get.find<NewTaskController>().getNewTaskList();
     Get.find<TaskCountController>().getTaskCountSummeryList();
-    super.initState();
-
   }
 
   @override
@@ -39,12 +38,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final response = await Get.to(const AddNewTaskScreen());
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => const AddNewTaskScreen(),
-          //   ),
-          // );
+
           if (response != null && response == true) {
             Get.find<TaskCountController>().getTaskCountSummeryList();
             Get.find<NewTaskController>().getNewTaskList();
@@ -58,11 +52,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ProfileSummeryCard(),
             GetBuilder<TaskCountController>(builder: (taskCountController) {
               return Visibility(
-                visible: taskCountController.getTaskCountSummeryInProgress ==
-                        false &&
-                    (taskCountController.taskCountSummeryListModel.taskCountList
-                            ?.isNotEmpty ??
-                        false),
+                visible: taskCountController.getTaskCountSummeryInProgress ==false,
+                    //     false &&
+                    // (taskCountController.taskCountSummeryListModel.taskCountList
+                    //         ?.isNotEmpty ??
+                    //     false),
                 replacement: const LinearProgressIndicator(),
                 child: SizedBox(
                   height: 120,

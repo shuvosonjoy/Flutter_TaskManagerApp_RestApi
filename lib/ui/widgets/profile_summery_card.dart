@@ -26,7 +26,7 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
     return GetBuilder<AuthController>(
 
       builder: (authController) {
-        Uint8List imageBytes = const Base64Decoder().convert(authController.user?.photo??'');
+     //   Uint8List imageBytes = const Base64Decoder().convert(authController.user?.photo??'');
         return ListTile(
           onTap: () {
             if (widget.enableOnTap == true) {
@@ -43,10 +43,11 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
                 ? const Icon(Icons.person)
                 : ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: Image.memory(
-                imageBytes,
-                fit: BoxFit.cover,
-              ),
+              child: Icon(Icons.add),
+              // child: Image.memory(
+              //   imageBytes,
+              //   fit: BoxFit.cover,
+              // ),
               //child:Icon(Icons.abc),
             ),
           ),

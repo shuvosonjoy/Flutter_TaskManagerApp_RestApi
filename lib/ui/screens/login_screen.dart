@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ostad_task_manager/ui/controller/login_controller.dart';
+import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/screens/forgot_password_screen.dart';
 import 'package:ostad_task_manager/ui/screens/main_bottom_navscreen.dart';
 import 'package:ostad_task_manager/ui/screens/signup_screen.dart';
@@ -171,6 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _emailController.text.trim(), _passwordController.text);
 
     if (response) {
+
       Get.offAll(const MainBottomNavScreen());
     } else {
       if (mounted) {

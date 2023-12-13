@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
+import 'package:ostad_task_manager/ui/controller/signup_controller.dart';
+import 'package:ostad_task_manager/ui/screens/login_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 
 import 'package:ostad_task_manager/data/network_caller/network_response.dart';
@@ -23,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _signUpInprogress = false;
+  SignUpController signUpController = Get.find<SignUpController>();
 
   @override
   Widget build(BuildContext context) {
@@ -148,15 +152,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: Visibility(
-                      visible: _signUpInprogress == false,
-                      replacement: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: _signUp,
-                        child: const Icon(Icons.arrow_circle_right_outlined),
-                      ),
+                    child: GetBuilder<SignUpController>(
+                      builder: (sController) {
+                        return Visibility(
+                          visible: signUpController.signUpInProgress == false,
+                          replacement: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: signUp,
+                            child: const Icon(Icons.arrow_circle_right_outlined),
+                          ),
+                        );
+                      }
                     ),
                   ),
                   const SizedBox(
@@ -195,36 +203,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> _signUp() async {
-    if (_formKey.currentState!.validate()) {
-      _signUpInprogress = true;
-      if (mounted) {
-        setState(() {});
-      }
-      final NetworkResponse response =
-          await NetWorkCaller().postRequest(Urls.registration, body: {
-        "email": _emailController.text.trim(),
-        "firstName": _firstNameController.text.trim(),
-        "lastName": _lastNameController.text.trim(),
-        "mobile": _mobileController.text.trim(),
-        "password": _passwordController.text,
-      });
-      _signUpInprogress = false;
-      if (mounted) {
-        setState(() {});
-      }
+  Future<void> signUp() async {
+    if (!_formKey.currentState!.validate()) {return;}
 
-      if (response.isSuccess) {
+      final response = await signUpController.signUp(_emailController.text.trim(), _firstNameController.text.trim(), _lastNameController.text.trim(), _mobileController.text.trim(), _passwordController.text);
+print('response: $response');
+    if (response) {
+      print('entered');
         _clearTextFields();
+
         if (mounted) {
           showSnackMessage(
-              context, 'Account Created Successfully, Please Login');
+              context,signUpController.successMessage);
+          Get.offAll(const LoginScreen());
         } else {
           showSnackMessage(
-              context, 'Account Creation failed, Please try again', true);
+              context,signUpController.failureMessage, true);
         }
       }
-    }
+
   }
 
   void _clearTextFields() {

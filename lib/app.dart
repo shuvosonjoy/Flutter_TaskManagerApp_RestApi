@@ -4,6 +4,7 @@ import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/controller/create_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/login_controller.dart';
 import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
+import 'package:ostad_task_manager/ui/controller/signup_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/screens/splash_screen.dart';
 
@@ -57,6 +58,7 @@ class ControllerBinder extends Bindings{
     Get.put(NewTaskController());
     Get.put(TaskCountController());
     Get.put(CreateTaskControler());
+    Get.put(SignUpController());
 
   }
 }

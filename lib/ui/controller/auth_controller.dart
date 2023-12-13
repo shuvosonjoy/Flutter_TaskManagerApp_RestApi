@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:ostad_task_manager/data/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class AuthController extends GetxController {
 
   static String? token;

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
-import 'package:ostad_task_manager/data/network_caller/network_response.dart';
-import 'package:ostad_task_manager/data/utility/urls.dart';
+import 'package:ostad_task_manager/ui/controller/create_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
-
 import '../widgets/profile_summery_card.dart';
 import 'main_bottom_navscreen.dart';
 
@@ -22,7 +19,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   TextEditingController _subjectTEController = TextEditingController();
   TextEditingController _descriptionTEController = TextEditingController();
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  bool _createTaskInprogress= false;
+  CreateTaskControler _createTaskControler = Get.find<CreateTaskControler>();
 
   @override
   Widget build(BuildContext context) {
@@ -83,16 +80,20 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                           ),
                           SizedBox(
                             width: double.infinity,
-                            child: Visibility(
-                              visible: _createTaskInprogress==false,
-                              replacement: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: createTask,
-                                child:
-                                    const Icon(Icons.arrow_circle_right_outlined),
-                              ),
+                            child: GetBuilder<CreateTaskControler>(
+                              builder: (createTaskController) {
+                                return Visibility(
+                                  visible: createTaskController.createTaskInProgress==false,
+                                  replacement: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  child: ElevatedButton(
+                                    onPressed: createTask,
+                                    child:
+                                        const Icon(Icons.arrow_circle_right_outlined),
+                                  ),
+                                );
+                              }
                             ),
                           ),
                         ],
@@ -110,39 +111,28 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
 
   Future<void> createTask() async{
 
-        if(_formkey.currentState!.validate()){
-          _createTaskInprogress =true;
-          if(mounted){
-            setState(() {
+        if(!_formkey.currentState!.validate()){
+          return;
+        }
 
-            });
-          }
-          final NetworkResponse response =await  NetWorkCaller().postRequest(Urls.createNewTask,body: {
-            "title":_subjectTEController.text.trim(),
-            "description":_descriptionTEController.text.trim(),
-            "status":"New"
-          });
-          _createTaskInprogress =false;
-          if(mounted){
-            setState(() {
+          final response = await _createTaskControler.createTask(_subjectTEController.text.trim(), _descriptionTEController.text.trim());
 
-            });
-          }
-          if(response.isSuccess){
+
+          if(response){
+            Get.offAll(const MainBottomNavScreen());
             Get.find<NewTaskController>().getNewTaskList();
             Get.find<TaskCountController>().getTaskCountSummeryList();
             _subjectTEController.clear();
             _descriptionTEController.clear();
-            showSnackMessage(context, 'New Task created');
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainBottomNavScreen()), (route) => false);
+            showSnackMessage(context, _createTaskControler.creationMessage);
 
           }else{
             if(mounted){
-              showSnackMessage(context, 'Create New Task failed, please try again',true);
+              showSnackMessage(context, _createTaskControler.failedMessage,true);
             }
           }
 
-        }
+
   }
 
   @override

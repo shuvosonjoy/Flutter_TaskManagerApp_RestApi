@@ -8,6 +8,7 @@ import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/network_caller/network_response.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
+import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/profile_summery_card.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
@@ -246,6 +247,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     if (response.isSuccess) {
       Get.find<NewTaskController>().getNewTaskList();
+      Get.find<TaskCountController>().getTaskCountSummeryList();
       authController.updateUserInformation(UserModel(
         email: _emailController.text.trim(),
         firstName: _firstNameController.text.trim(),

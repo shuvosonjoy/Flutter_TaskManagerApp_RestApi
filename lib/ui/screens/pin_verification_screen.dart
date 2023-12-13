@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
+import 'package:get/get.dart';
+import 'package:ostad_task_manager/ui/controller/pinverification_controller.dart';
 import 'package:ostad_task_manager/ui/screens/login_screen.dart';
 import 'package:ostad_task_manager/ui/screens/reset_password_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../data/network_caller/network_response.dart';
-import '../../data/utility/urls.dart';
 
 class PinVerificationScreen extends StatefulWidget {
   final String email;
@@ -19,39 +18,21 @@ class PinVerificationScreen extends StatefulWidget {
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
+  PinVerificationController pinVerificationController = Get.find<PinVerificationController>();
   final TextEditingController _otpTEController = TextEditingController();
   bool _otpInProgress = false;
 
   Future<void> verifyOTP() async {
-    _otpInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response = await NetWorkCaller()
-        .getRequest(Urls.verifyOTP(widget.email, _otpTEController.text.trim()));
+    final response = await pinVerificationController.verifyOTP(widget.email, _otpTEController.toString());
 
+    if (response) {
 
-    _otpInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess && response!=null) {
       if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResetPasswordScreen(
-              email: widget.email,
-              otp: _otpTEController.text,
-            ),
-          ),
-        );
+        Get.to(ResetPasswordScreen(email: widget.email, otp: _otpTEController.text));
       }
     } else {
       if (mounted) {
-        print(_otpTEController.text);
-        print(widget.email);
-        showSnackMessage(context, 'Otp verification has been failed!', true);
+        showSnackMessage(context,pinVerificationController.snackMessage, true);
       }
     }
   }
@@ -131,15 +112,19 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     replacement: Center(
                       child: CircularProgressIndicator(),
                     ),
-                    child: Visibility(
-                      visible: _otpInProgress==false,
-                      replacement: Center(child: CircularProgressIndicator(),),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          verifyOTP();
-                        },
-                        child: const Text('Verify'),
-                      ),
+                    child: GetBuilder<PinVerificationController>(
+                      builder: (_pinverficationController) {
+                        return Visibility(
+                          visible: _pinverficationController.otpInProgress==false,
+                          replacement: Center(child: CircularProgressIndicator(),),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              verifyOTP();
+                            },
+                            child: const Text('Verify'),
+                          ),
+                        );
+                      }
                     ),
                   ),
                 ),

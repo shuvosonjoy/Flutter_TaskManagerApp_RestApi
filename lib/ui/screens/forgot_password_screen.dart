@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
-import 'package:ostad_task_manager/data/network_caller/network_response.dart';
+import 'package:get/get.dart';
+import 'package:ostad_task_manager/ui/controller/forgotpassword_controller.dart';
 import 'package:ostad_task_manager/ui/screens/pin_verification_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
-
-import '../../data/utility/urls.dart';
 import '../widgets/snack_message.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -15,7 +13,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  bool forgetPasswordInProgess = false;
+  ForgotPasswordController _forgotPasswordController =
+      Get.find<ForgotPasswordController>();
 
   final TextEditingController _emailTEController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -83,24 +82,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: Visibility(
-                      visible: forgetPasswordInProgess==false,
-                      replacement: Center(child:CircularProgressIndicator()),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-
-                            forgetPassword();
-                            if(mounted){
-                              setState(() {
-                                //  profileSummeryCard;
-
-                              });
-                            }
-                          }
-                        },
-                        child: const Icon(Icons.arrow_circle_right_outlined),
-                      ),
+                    child: GetBuilder<ForgotPasswordController>(
+                      builder: (controller) {
+                        return Visibility(
+                          visible: controller.forgetPasswordInProgress == false,
+                          replacement: Center(child: CircularProgressIndicator()),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                forgetPassword();
+                                if (mounted) {
+                                  setState(() {
+                                    //  profileSummeryCard;
+                                  });
+                                }
+                              }
+                            },
+                            child: const Icon(Icons.arrow_circle_right_outlined),
+                          ),
+                        );
+                      }
                     ),
                   ),
                   const SizedBox(
@@ -140,36 +141,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Future<void> forgetPassword() async {
-    forgetPasswordInProgess = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response =
-        await NetWorkCaller().getRequest(Urls.recoveryEmailUrl(_emailTEController.text.trim()));
-    forgetPasswordInProgess=false;
-    if(mounted){
-      setState(() {
+    final response = await _forgotPasswordController.forgetPassword(_emailTEController.text.trim());
 
-      });
-    }
-
-    if (response.isSuccess) {
-
+    if (response) {
       if (mounted) {
-
-        showSnackMessage(context, 'OTP sent to email address');
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>  PinVerificationScreen(email: _emailTEController.text.trim(),),
-          ),
-        );
+        showSnackMessage(context, _forgotPasswordController.snackMessage);
+        Get.to(
+            () => PinVerificationScreen(email: _emailTEController.text.trim()));
       }
-      else{
-        if (mounted) {
-          showSnackMessage(
-              context, 'OTP sent failed. Try again!', true);
-        }
+    } else {
+      if (mounted) {
+        showSnackMessage(context, _forgotPasswordController.snackMessage, true);
       }
     }
   }

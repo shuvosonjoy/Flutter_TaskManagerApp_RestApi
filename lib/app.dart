@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/controller/create_task_controller.dart';
+import 'package:ostad_task_manager/ui/controller/forgotpassword_controller.dart';
 import 'package:ostad_task_manager/ui/controller/login_controller.dart';
 import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/signup_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/screens/splash_screen.dart';
 
+import 'ui/controller/pinverification_controller.dart';
 import 'ui/controller/resetpassword_controller.dart';
 
 class TaskManagerApp extends StatelessWidget {
@@ -62,6 +64,8 @@ class ControllerBinder extends Bindings{
     Get.put(CreateTaskControler());
     Get.put(SignUpController());
     Get.put(ResetPasswordController());
+    Get.put(PinVerificationController());
+    Get.put(ForgotPasswordController());
 
   }
 }

@@ -17,19 +17,20 @@ class AuthController extends GetxController {
     update();
   }
 
+
    Future<void> updateUserInformation(UserModel model) async {
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
     await sharedPreferences.setString('user', jsonEncode(model.toJson()));
 
     user= model;
     update();
   }
 
-   Future<void>initializeUserCache() async {
-    SharedPreferences sharedPreferences = await  SharedPreferences.getInstance();
 
+   Future<void>initializeUserCache() async {
+
+    SharedPreferences sharedPreferences = await  SharedPreferences.getInstance();
     token = sharedPreferences.getString('token');
     user = UserModel.fromJson(jsonDecode(sharedPreferences.getString('user')?? '{}'));
     update();

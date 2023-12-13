@@ -30,9 +30,12 @@ class SignUpController extends GetxController{
       if (response.isSuccess) {
 
         _successMessage = "Account Created Successfully, Please Login";
-        _failureMessage ='Account Creation failed, Please try again';
+
         isSuccess =true;
         }
+      else{
+        _failureMessage ='Account Creation failed, Please try again';
+      }
       update();
       return isSuccess;
 

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/ui/controller/signup_controller.dart';
 import 'package:ostad_task_manager/ui/screens/login_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
-
-import 'package:ostad_task_manager/data/network_caller/network_response.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
-
-import '../../data/utility/urls.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -25,7 +20,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _signUpInprogress = false;
   SignUpController signUpController = Get.find<SignUpController>();
 
   @override
@@ -152,20 +146,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: GetBuilder<SignUpController>(
-                      builder: (sController) {
-                        return Visibility(
-                          visible: signUpController.signUpInProgress == false,
-                          replacement: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          child: ElevatedButton(
-                            onPressed: signUp,
-                            child: const Icon(Icons.arrow_circle_right_outlined),
-                          ),
-                        );
-                      }
-                    ),
+                    child: GetBuilder<SignUpController>(builder: (sController) {
+                      return Visibility(
+                        visible: signUpController.signUpInProgress == false,
+                        replacement: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: signUp,
+                          child: const Icon(Icons.arrow_circle_right_outlined),
+                        ),
+                      );
+                    }),
                   ),
                   const SizedBox(
                     height: 48,
@@ -204,24 +196,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> signUp() async {
-    if (!_formKey.currentState!.validate()) {return;}
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
-      final response = await signUpController.signUp(_emailController.text.trim(), _firstNameController.text.trim(), _lastNameController.text.trim(), _mobileController.text.trim(), _passwordController.text);
-print('response: $response');
+    final response = await signUpController.signUp(
+        _emailController.text.trim(),
+        _firstNameController.text.trim(),
+        _lastNameController.text.trim(),
+        _mobileController.text.trim(),
+        _passwordController.text);
+
     if (response) {
-      print('entered');
-        _clearTextFields();
 
-        if (mounted) {
-          showSnackMessage(
-              context,signUpController.successMessage);
-          Get.offAll(const LoginScreen());
-        } else {
-          showSnackMessage(
-              context,signUpController.failureMessage, true);
-        }
+      _clearTextFields();
+
+      if (mounted) {
+        showSnackMessage(context, signUpController.successMessage);
+        Get.offAll(const LoginScreen());
       }
-
+    } else {
+      if (mounted) {
+        showSnackMessage(context, signUpController.failureMessage, true);
+      }
+    }
   }
 
   void _clearTextFields() {

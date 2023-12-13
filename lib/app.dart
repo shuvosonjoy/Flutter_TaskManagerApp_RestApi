@@ -8,6 +8,8 @@ import 'package:ostad_task_manager/ui/controller/signup_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/screens/splash_screen.dart';
 
+import 'ui/controller/resetpassword_controller.dart';
+
 class TaskManagerApp extends StatelessWidget {
   const TaskManagerApp({super.key});
   static GlobalKey<NavigatorState>navigationKey=GlobalKey<NavigatorState>();
@@ -59,6 +61,7 @@ class ControllerBinder extends Bindings{
     Get.put(TaskCountController());
     Get.put(CreateTaskControler());
     Get.put(SignUpController());
+    Get.put(ResetPasswordController());
 
   }
 }

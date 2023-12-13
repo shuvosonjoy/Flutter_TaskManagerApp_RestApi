@@ -26,7 +26,11 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
     return GetBuilder<AuthController>(
 
       builder: (authController) {
-     //   Uint8List imageBytes = const Base64Decoder().convert(authController.user?.photo??'');
+        //Uint8List imageBytes = const Base64Decoder().convert(authController.user?.photo??'');
+        var img64=authController.user?.photo??'';
+        final decodestring = base64Decode('$img64'.split(',').last);
+        Uint8List imageBytes = decodestring;
+
         return ListTile(
           onTap: () {
             if (widget.enableOnTap == true) {
@@ -43,12 +47,12 @@ class _ProfileSummeryCardState extends State<ProfileSummeryCard> {
                 ? const Icon(Icons.person)
                 : ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: Icon(Icons.add),
-              // child: Image.memory(
-              //   imageBytes,
-              //   fit: BoxFit.cover,
-              // ),
-              //child:Icon(Icons.abc),
+              // child: Icon(Icons.add),
+              child: Image.memory(
+                imageBytes,
+                fit: BoxFit.cover,
+              ),
+
             ),
           ),
           title:  Text(

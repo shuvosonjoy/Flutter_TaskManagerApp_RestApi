@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ostad_task_manager/ui/controller/resetpassword_controller.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
-import '../../data/network_caller/network_caller.dart';
-import '../../data/network_caller/network_response.dart';
-import '../../data/utility/urls.dart';
 import '../widgets/body_background.dart';
 import 'login_screen.dart';
 
@@ -22,29 +21,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   bool _resetPasswordInProgress = false;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future<void> resetPassword() async {
-    _resetPasswordInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
+  ResetPasswordController resetPasswordController = Get.find<ResetPasswordController>();
 
-    final NetworkResponse response = await NetWorkCaller().postRequest(Urls.resetPassword, body:{
-      "email": widget.email,
-      "OTP": widget.otp,
-      "password": _passwordTEController.text
-    });
-    _resetPasswordInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
+  Future<void> resetPassword() async {
+   final response = await resetPasswordController.resetPassword(widget.email, widget.otp, _passwordTEController.text);
+
+    if (response) {
       if (mounted) {
-        showSnackMessage(context, 'Password reset successfull');
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const LoginScreen()), (route) => false);
+        showSnackMessage(context, resetPasswordController.snackMessage);
+        Get.offAll(const LoginScreen());
       }
     } else {
       if (mounted) {
-      showSnackMessage(context, 'Password reset failed',true);
+      showSnackMessage(context,resetPasswordController.snackMessage,true);
       }
     }
   }

@@ -19,7 +19,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   TextEditingController _subjectTEController = TextEditingController();
   TextEditingController _descriptionTEController = TextEditingController();
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  CreateTaskControler _createTaskControler = Get.find<CreateTaskControler>();
+  CreateTaskControler _createTaskController = Get.find<CreateTaskControler>();
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
           return;
         }
 
-          final response = await _createTaskControler.createTask(_subjectTEController.text.trim(), _descriptionTEController.text.trim());
+          final response = await _createTaskController.createTask(_subjectTEController.text.trim(), _descriptionTEController.text.trim());
 
 
           if(response){
@@ -124,11 +124,11 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
             Get.find<TaskCountController>().getTaskCountSummeryList();
             _subjectTEController.clear();
             _descriptionTEController.clear();
-            showSnackMessage(context, _createTaskControler.creationMessage);
+            showSnackMessage(context, _createTaskController.creationMessage);
 
           }else{
             if(mounted){
-              showSnackMessage(context, _createTaskControler.failedMessage,true);
+              showSnackMessage(context, _createTaskController.failedMessage,true);
             }
           }
 

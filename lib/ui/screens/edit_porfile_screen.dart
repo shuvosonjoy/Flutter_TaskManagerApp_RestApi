@@ -7,6 +7,7 @@ import 'package:ostad_task_manager/data/model/user_model.dart';
 import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
 import 'package:ostad_task_manager/data/network_caller/network_response.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
+import 'package:ostad_task_manager/ui/controller/editprofile_controller.dart';
 import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
@@ -23,6 +24,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  EditProfileController _editProfileController = Get.find<EditProfileController>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -32,7 +34,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? photoBase64;
   ProfileSummeryCard profileSummeryCard = ProfileSummeryCard();
 
-  bool updateProfileInProgress = false;
+
   AuthController authController =Get.find<AuthController>();
 
   XFile? photo;
@@ -181,27 +183,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(
                             width: double.infinity,
-                            child: Visibility(
-                              visible: updateProfileInProgress == false,
-                              replacement:
-                                  Center(child: CircularProgressIndicator()),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    updateProfile();
+                            child: GetBuilder<EditProfileController>(
+                              builder: (controller) {
+                                return Visibility(
+                                  visible: controller.updateProfileInProgress == false,
+                                  replacement:
+                                      Center(child: CircularProgressIndicator()),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        updateProfile();
 
 
-                                    if(mounted){
-                                      setState(() {
-                                      //  profileSummeryCard;
 
-                                      });
-                                    }
-                                  }
-                                },
-                                child: const Icon(
-                                    Icons.arrow_circle_right_outlined),
-                              ),
+                                        if(mounted){
+                                          setState(() {
+                                          //  profileSummeryCard;
+
+                                          });
+                                        }
+                                      }
+                                    },
+                                    child: const Icon(
+                                        Icons.arrow_circle_right_outlined),
+                                  ),
+                                );
+                              }
                             ),
                           ),
                         ],
@@ -218,52 +225,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> updateProfile() async {
-    updateProfileInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    Map<String, dynamic> inputsData = {
-      "email": _emailController.text.trim(),
-      "firstName": _firstNameController.text.trim(),
-      "lastName": _lastNameController.text.trim(),
-      "mobile": _mobileController.text.trim(),
-    };
 
-    if (_passwordController.text.isNotEmpty) {
-      inputsData['password'] = _passwordController.text;
-    }
-    if(photo!=null){
-      List<int> imageBytes= await photo!.readAsBytes();
-      photoBase64 = base64Encode(imageBytes);
-      inputsData['photo']= photoBase64;
-    }
-    final NetworkResponse response =
-        await NetWorkCaller().postRequest(Urls.updateProfile, body: inputsData);
+    final response = await _editProfileController.updateProfile(_emailController.text.trim(), _firstNameController.text.trim(), _lastNameController.text.trim(), _mobileController.text.trim(), _passwordController.text, photo);
 
-    updateProfileInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
 
-    if (response.isSuccess) {
-      Get.find<NewTaskController>().getNewTaskList();
-      Get.find<TaskCountController>().getTaskCountSummeryList();
-      authController.updateUserInformation(UserModel(
-        email: _emailController.text.trim(),
-        firstName: _firstNameController.text.trim(),
-        lastName: _lastNameController.text.trim(),
-        mobile: _mobileController.text.trim(),
-        photo: photoBase64??authController.user?.photo??'',
 
-      ));
+    print('repsonseeeeeeeeeee $response');
+    if (response) {
+      // Get.find<NewTaskController>().getNewTaskList();
+      // Get.find<TaskCountController>().getTaskCountSummeryList();
+
       if (mounted) {
-        showSnackMessage(context, 'Update Profile success');
+        showSnackMessage(context, _editProfileController.snackMessage);
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainBottomNavScreen()), (route) => false);
 
       }
     } else {
       if (mounted) {
-        showSnackMessage(context, 'Update Profile failed. try again',true);
+        showSnackMessage(context, _editProfileController.snackMessage,true);
       }
     }
   }

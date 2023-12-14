@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/controller/canceltask_controller.dart';
 import 'package:ostad_task_manager/ui/controller/create_task_controller.dart';
+import 'package:ostad_task_manager/ui/controller/editprofile_controller.dart';
 import 'package:ostad_task_manager/ui/controller/forgotpassword_controller.dart';
 import 'package:ostad_task_manager/ui/controller/login_controller.dart';
 import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
+import 'package:ostad_task_manager/ui/controller/progress_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/signup_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/screens/splash_screen.dart';
@@ -68,6 +70,8 @@ class ControllerBinder extends Bindings{
     Get.put(PinVerificationController());
     Get.put(ForgotPasswordController());
     Get.put(CancelTaskController());
+    Get.put(ProgressTaskController());
+    Get.put(EditProfileController());
 
   }
 }

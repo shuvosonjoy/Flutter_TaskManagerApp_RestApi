@@ -16,8 +16,6 @@ class PinVerificationController extends GetxController {
     _otpInProgress = true;
     update();
 
-
-
     final NetworkResponse response =
         await NetWorkCaller().getRequest(Urls.verifyOTP(email, otp));
 
@@ -25,8 +23,8 @@ class PinVerificationController extends GetxController {
     update();
 
     if (response.isSuccess && response != null) {
-
       isSuccess = true;
+
     } else {
       _snackMessage = 'Otp verification has been failed';
     }

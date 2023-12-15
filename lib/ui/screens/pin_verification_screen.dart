@@ -30,6 +30,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
     if (response) {
 
       if (mounted) {
+        showSnackMessage(context, pinVerificationController.snackMessage);
         Get.to(ResetPasswordScreen(
             email: widget.email, otp: otpCode['otp']!));
 

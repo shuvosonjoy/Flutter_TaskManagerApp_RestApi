@@ -20,11 +20,12 @@ class PinVerificationController extends GetxController {
         await NetWorkCaller().getRequest(Urls.verifyOTP(email, otp));
 
     _otpInProgress = false;
-    update();
+
 
     if (response.isSuccess && response != null) {
       if (response.jsonResponse['status'] == 'success') {
         isSuccess = true;
+        _snackMessage='OTP verified';
       }
       else{
         _snackMessage='Invalid OTP';
@@ -32,6 +33,7 @@ class PinVerificationController extends GetxController {
     } else {
       _snackMessage = 'Otp verification has been failed';
     }
+    update();
     return isSuccess;
   }
 }

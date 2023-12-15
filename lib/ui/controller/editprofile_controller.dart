@@ -20,6 +20,7 @@ class EditProfileController extends GetxController {
 
   Future<bool> updateProfile(String email, String firstName, String lastName,
       String mobile, String password, XFile? photo) async {
+    bool isSuccess=false;
     _updateProfileInProgress = true;
     update();
     Map<String, dynamic> inputsData = {
@@ -53,11 +54,11 @@ class EditProfileController extends GetxController {
           photo: photoBase64 ?? Get.find<AuthController>().user?.photo ?? ''));
 
       _snackMessage = 'Update Profile success';
-      return true;
+     isSuccess = true;
     } else {
       _snackMessage = 'Update Profile failed. try again';
     }
     update();
-    return false;
+    return isSuccess;
   }
 }

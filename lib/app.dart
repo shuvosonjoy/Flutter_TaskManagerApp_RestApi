@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/controller/canceltask_controller.dart';
+import 'package:ostad_task_manager/ui/controller/completedtask_controller.dart';
 import 'package:ostad_task_manager/ui/controller/create_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/editprofile_controller.dart';
 import 'package:ostad_task_manager/ui/controller/forgotpassword_controller.dart';
@@ -72,6 +73,7 @@ class ControllerBinder extends Bindings{
     Get.put(CancelTaskController());
     Get.put(ProgressTaskController());
     Get.put(EditProfileController());
+    Get.put(CompletedTaskController());
 
   }
 }

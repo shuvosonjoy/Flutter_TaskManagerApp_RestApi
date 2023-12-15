@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ostad_task_manager/ui/controller/forgotpassword_controller.dart';
+import 'package:ostad_task_manager/ui/screens/login_screen.dart';
 import 'package:ostad_task_manager/ui/screens/pin_verification_screen.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import '../widgets/snack_message.dart';
@@ -120,7 +121,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Get.offAll(const LoginScreen());
+                          //Navigator.pop(context);
                         },
                         child: const Text(
                           'Sign In',

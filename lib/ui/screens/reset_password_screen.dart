@@ -18,7 +18,6 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
   final TextEditingController _confirmPasswordTEController = TextEditingController();
-  bool _resetPasswordInProgress = false;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ResetPasswordController resetPasswordController = Get.find<ResetPasswordController>();
@@ -139,12 +138,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         ),
                         TextButton(
                             onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const LoginScreen()),
-                                      (route) => false);
+                              Get.offAll(()=> const LoginScreen());
+
                             },
                             child: const Text('Sign in')),
                       ],

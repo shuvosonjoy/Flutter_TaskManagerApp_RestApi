@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:ostad_task_manager/app.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/screens/login_screen.dart';
-import 'package:ostad_task_manager/app.dart';
-import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
+
 
 import 'network_response.dart';
 

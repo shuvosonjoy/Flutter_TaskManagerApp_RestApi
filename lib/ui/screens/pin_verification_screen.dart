@@ -7,7 +7,6 @@ import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-
 class PinVerificationScreen extends StatefulWidget {
   final String email;
 
@@ -18,21 +17,26 @@ class PinVerificationScreen extends StatefulWidget {
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
-  PinVerificationController pinVerificationController = Get.find<PinVerificationController>();
+  Map<String, String> otpCode = {'otp': ''};
+  PinVerificationController pinVerificationController =
+      Get.find<PinVerificationController>();
   final TextEditingController _otpTEController = TextEditingController();
-  bool _otpInProgress = false;
 
   Future<void> verifyOTP() async {
-    final response = await pinVerificationController.verifyOTP(widget.email, _otpTEController.toString());
+
+    final response = await pinVerificationController.verifyOTP(
+        widget.email,  otpCode['otp']!);
 
     if (response) {
 
       if (mounted) {
-        Get.to(ResetPasswordScreen(email: widget.email, otp: _otpTEController.text));
+        Get.to(ResetPasswordScreen(
+            email: widget.email, otp: otpCode['otp']!));
+
       }
     } else {
       if (mounted) {
-        showSnackMessage(context,pinVerificationController.snackMessage, true);
+        showSnackMessage(context, pinVerificationController.snackMessage, true);
       }
     }
   }
@@ -91,6 +95,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     print("Completed");
                   },
                   onChanged: (value) {
+                    otpCode['otp'] = value;
                     print(value);
                     setState(() {});
                   },
@@ -107,26 +112,21 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: Visibility(
-                    visible: _otpInProgress == false,
-                    replacement: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    child: GetBuilder<PinVerificationController>(
+                  child: GetBuilder<PinVerificationController>(
                       builder: (_pinverficationController) {
-                        return Visibility(
-                          visible: _pinverficationController.otpInProgress==false,
-                          replacement: Center(child: CircularProgressIndicator(),),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              verifyOTP();
-                            },
-                            child: const Text('Verify'),
-                          ),
-                        );
-                      }
-                    ),
-                  ),
+                    return Visibility(
+                      visible: _pinverficationController.otpInProgress == false,
+                      replacement: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          verifyOTP();
+                        },
+                        child: const Text('Verify'),
+                      ),
+                    );
+                  }),
                 ),
                 const SizedBox(
                   height: 48,
@@ -144,12 +144,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
-                            (route) => false);
+                        Get.offAll(()=>const LoginScreen());
                       },
                       child: const Text(
                         'Sign In',

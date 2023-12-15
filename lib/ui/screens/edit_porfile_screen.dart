@@ -1,19 +1,12 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ostad_task_manager/data/model/user_model.dart';
-import 'package:ostad_task_manager/data/network_caller/network_caller.dart';
-import 'package:ostad_task_manager/data/network_caller/network_response.dart';
 import 'package:ostad_task_manager/ui/controller/auth_controller.dart';
 import 'package:ostad_task_manager/ui/controller/editprofile_controller.dart';
-import 'package:ostad_task_manager/ui/controller/new_task_controller.dart';
-import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/widgets/body_background.dart';
 import 'package:ostad_task_manager/ui/widgets/profile_summery_card.dart';
 import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
-import '../../data/utility/urls.dart';
 import 'main_bottom_navscreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -47,13 +40,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _firstNameController.text = authController.user?.firstName ?? '';
     _lastNameController.text = authController.user?.lastName ?? '';
     _mobileController.text = authController.user?.mobile ?? '';
-  //  profileSummeryCard;
-  //  updateProfile();
-  //   if(mounted){
-  //     setState(() {
-  //     }
-  //    );
-  //   }
+
   }
 
   @override
@@ -229,11 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final response = await _editProfileController.updateProfile(_emailController.text.trim(), _firstNameController.text.trim(), _lastNameController.text.trim(), _mobileController.text.trim(), _passwordController.text, photo);
 
 
-
-    print('repsonseeeeeeeeeee $response');
     if (response) {
-      // Get.find<NewTaskController>().getNewTaskList();
-      // Get.find<TaskCountController>().getTaskCountSummeryList();
 
       if (mounted) {
         showSnackMessage(context, _editProfileController.snackMessage);

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:ostad_task_manager/ui/controller/completedtask_controller.dart';
+import 'package:ostad_task_manager/ui/widgets/snack_message.dart';
 import '../../data/model/task_list_model.dart';
-import '../../data/network_caller/network_caller.dart';
-import '../../data/network_caller/network_response.dart';
-import '../../data/utility/urls.dart';
 import '../widgets/profile_summery_card.dart';
 import '../widgets/task_item_card.dart';
 
@@ -15,70 +14,57 @@ class CompletedTaskScreen extends StatefulWidget {
 }
 
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
-  bool getCompletedTaskInProgress = false;
   TaskListModel taskListModel = TaskListModel();
+  CompletedTaskController _completedTaskController =
+      Get.find<CompletedTaskController>();
 
   Future<void> getCompletedTaskList() async {
-    getCompletedTaskInProgress = true;
-    if (mounted) {
-      setState(() {});
-      final NetworkResponse response =
-          await NetWorkCaller().getRequest(Urls.getCompletedTask);
-      if (response.isSuccess) {
-        taskListModel = TaskListModel.fromJson(response.jsonResponse);
-      }
-      getCompletedTaskInProgress = false;
-      if (mounted) {
-        setState(() {});
-      }
+    final response = await _completedTaskController.getCompletedTaskList();
+
+    if (response) {
+      print("entered entered");
+      showSnackMessage(context, _completedTaskController.snackMessage);
     }
   }
 
   void initState() {
     super.initState();
-    getCompletedTaskList();
+    _completedTaskController.getCompletedTaskList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: Column(
-            children: [
-              const ProfileSummeryCard(),
-
-              Expanded(
-                child: Visibility(
-                  visible: getCompletedTaskInProgress == false,
-                  replacement: Center(
-                    child: const CircularProgressIndicator(),
-                  ),
-                  child: RefreshIndicator(
-                    onRefresh: getCompletedTaskList,
-                    child: ListView.builder(
-                        itemCount: taskListModel.taskList?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return TaskItemCard(
-                            task: taskListModel.taskList![index],
-                            onStatusChange: (){
-                              getCompletedTaskList();
-
-                            },
-                            showProgress: (inProgress){
-                              getCompletedTaskInProgress = inProgress;
-                              if(mounted){
-                                setState(() {
-
-                                });
-                              }
-                            },
-                          );
-                        }),
-                  ),
+      child: Column(
+        children: [
+          const ProfileSummeryCard(),
+          Expanded(
+            child: GetBuilder<CompletedTaskController>(builder: (controller) {
+              return Visibility(
+                visible: controller.getTaskInProgress == false,
+                replacement: Center(
+                  child: const CircularProgressIndicator(),
                 ),
-              ),
-            ],
+                child: RefreshIndicator(
+                  onRefresh: getCompletedTaskList,
+                  child: ListView.builder(
+                      itemCount: controller.taskListModel.taskList?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return TaskItemCard(
+                          task: controller.taskListModel.taskList![index],
+                          onStatusChange: () {
+                            controller.getCompletedTaskList();
+                          },
+                          showProgress: (inProgress) {},
+                        );
+                      }),
+                ),
+              );
+            }),
           ),
-        ));
+        ],
+      ),
+    ));
   }
 }

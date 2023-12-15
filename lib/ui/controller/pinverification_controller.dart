@@ -8,8 +8,8 @@ class PinVerificationController extends GetxController {
   String _snackMessage = "";
 
   bool get otpInProgress => _otpInProgress;
-  String get snackMessage => _snackMessage;
 
+  String get snackMessage => _snackMessage;
 
   Future<bool> verifyOTP(String email, String otp) async {
     bool isSuccess = false;
@@ -23,8 +23,12 @@ class PinVerificationController extends GetxController {
     update();
 
     if (response.isSuccess && response != null) {
-      isSuccess = true;
-
+      if (response.jsonResponse['status'] == 'success') {
+        isSuccess = true;
+      }
+      else{
+        _snackMessage='Invalid OTP';
+      }
     } else {
       _snackMessage = 'Otp verification has been failed';
     }

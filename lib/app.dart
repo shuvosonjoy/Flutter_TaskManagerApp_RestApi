@@ -12,7 +12,6 @@ import 'package:ostad_task_manager/ui/controller/progress_task_controller.dart';
 import 'package:ostad_task_manager/ui/controller/signup_controller.dart';
 import 'package:ostad_task_manager/ui/controller/task_count_summery.dart';
 import 'package:ostad_task_manager/ui/screens/splash_screen.dart';
-
 import 'ui/controller/pinverification_controller.dart';
 import 'ui/controller/resetpassword_controller.dart';
 
